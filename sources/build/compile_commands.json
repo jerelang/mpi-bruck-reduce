@@ -1,0 +1,26 @@
+[
+{
+  "directory": "/Users/jere/Documents/uni/hpc_2/sources/build",
+  "command": "/usr/bin/c++  -isystem /opt/homebrew/Cellar/open-mpi/5.0.6/include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -O3 -march=native -Wall -pedantic -o CMakeFiles/allgather_merge.dir/main.cpp.o -c /Users/jere/Documents/uni/hpc_2/sources/main.cpp",
+  "file": "/Users/jere/Documents/uni/hpc_2/sources/main.cpp",
+  "output": "CMakeFiles/allgather_merge.dir/main.cpp.o"
+},
+{
+  "directory": "/Users/jere/Documents/uni/hpc_2/sources/build",
+  "command": "/usr/bin/c++  -isystem /opt/homebrew/Cellar/open-mpi/5.0.6/include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -O3 -march=native -Wall -pedantic -o CMakeFiles/allgather_merge.dir/baseline.cpp.o -c /Users/jere/Documents/uni/hpc_2/sources/baseline.cpp",
+  "file": "/Users/jere/Documents/uni/hpc_2/sources/baseline.cpp",
+  "output": "CMakeFiles/allgather_merge.dir/baseline.cpp.o"
+},
+{
+  "directory": "/Users/jere/Documents/uni/hpc_2/sources/build",
+  "command": "/usr/bin/c++  -isystem /opt/homebrew/Cellar/open-mpi/5.0.6/include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -O3 -march=native -Wall -pedantic -o CMakeFiles/allgather_merge.dir/algorithm1.cpp.o -c /Users/jere/Documents/uni/hpc_2/sources/algorithm1.cpp",
+  "file": "/Users/jere/Documents/uni/hpc_2/sources/algorithm1.cpp",
+  "output": "CMakeFiles/allgather_merge.dir/algorithm1.cpp.o"
+},
+{
+  "directory": "/Users/jere/Documents/uni/hpc_2/sources/build",
+  "command": "/usr/bin/c++  -isystem /opt/homebrew/Cellar/open-mpi/5.0.6/include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -O3 -march=native -Wall -pedantic -o CMakeFiles/allgather_merge.dir/algorithm2.cpp.o -c /Users/jere/Documents/uni/hpc_2/sources/algorithm2.cpp",
+  "file": "/Users/jere/Documents/uni/hpc_2/sources/algorithm2.cpp",
+  "output": "CMakeFiles/allgather_merge.dir/algorithm2.cpp.o"
+}
+]
