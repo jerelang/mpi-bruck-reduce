@@ -205,11 +205,10 @@ void run_all_measurements(int rank, int size, int algo, int msg_index, int type,
         HPC_AllgatherMergeBase(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, recvbuf, m, TUW_TYPE, comm);
         break;
       case Bruck:
-        HPC_AllgatherMergeBruck(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, recvbuf, m, TUW_TYPE, comm);
+        HPC_AllgatherMergeBruck(sendbuf, m, TUW_TYPE, recvbuf, m, TUW_TYPE, comm);
         break;
       case Circulant:
-        HPC_AllgatherMergeCirculant(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, recvbuf, m, TUW_TYPE,
-                                    comm);
+        HPC_AllgatherMergeBruck(sendbuf, m, TUW_TYPE, recvbuf, m, TUW_TYPE, comm);
         break;
       default:
         break;

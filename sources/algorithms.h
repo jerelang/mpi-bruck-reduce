@@ -9,6 +9,9 @@ typedef int tuwtype_t;
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+void mergeInts(const int* a, int aSize, const int* b, int bSize, int* out);
+
 // Baseline algorithm
 int HPC_AllgatherMergeBase(const void *sendbuf, int sendcount,
                            MPI_Datatype sendtype, void *recvbuf, int recvcount,

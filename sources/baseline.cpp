@@ -2,8 +2,18 @@
 #include <algorithm>
 #include <vector>
 #include <cstring>
+#include <iostream>
 
 #include "algorithms.h"
+
+void mergeInts(const int* a, int aSize, const int* b, int bSize, int* out) {
+    int i = 0, j = 0, k = 0;
+    while (i < aSize && j < bSize) {
+        out[k++] = (a[i] < b[j]) ? a[i++] : b[j++];
+    }
+    while (i < aSize) out[k++] = a[i++];
+    while (j < bSize) out[k++] = b[j++];
+}
 
 int HPC_AllgatherMergeBase(const void *sendbuf,
                            int sendcount,
@@ -35,49 +45,44 @@ int HPC_AllgatherMergeBase(const void *sendbuf,
     tuwtype_t* inPtr  = data;
     tuwtype_t* outPtr = temp.data();
 
-    int currBlockSize = recvcount;
+    int blockSize = recvcount;
+    int numBlocks = size;
 
-    // Pairwise merges as a tree strcuture
-    for (int step = 1; step < size; step <<= 1) {
-        for (int blockIndex = 0; blockIndex < size; blockIndex += 2 * step) {
-            int leftStartBlock  = blockIndex;
-            int rightStartBlock = blockIndex + step;
-            if (rightStartBlock >= size) {
-                break; // no right block
-            }
+    while (numBlocks > 1) {
+        int outBlock = 0;
 
-            int leftStartIdx  = leftStartBlock  * currBlockSize;
-            int rightStartIdx = rightStartBlock * currBlockSize;
-            int leftSize  = currBlockSize;
-            int rightSize = currBlockSize;
-            if (leftStartIdx + leftSize > totalCount) {
-                leftSize = totalCount - leftStartIdx; // cut off near end
-            }
-            if (rightStartIdx + rightSize > totalCount) {
-                rightSize = totalCount - rightStartIdx; // cut off near end
-            }
+        for (int i = 0; i + 1 < numBlocks; i += 2) {
+            int leftStart = i * blockSize;
+            int rightStart = (i + 1) * blockSize;
 
-            std::merge(inPtr + leftStartIdx, inPtr + (leftStartIdx + leftSize),
-                       inPtr + rightStartIdx, inPtr + (rightStartIdx + rightSize),
-                       outPtr + leftStartIdx);
+            int leftSize = std::min(blockSize, totalCount - leftStart);
+            int rightSize = std::min(blockSize, totalCount - rightStart);
+
+            mergeInts(inPtr + leftStart, leftSize,
+                    inPtr + rightStart, rightSize,
+                    outPtr + leftStart);
+
+            ++outBlock;
         }
 
-        int leftover = ((size / (2 * step)) * (2 * step)) * currBlockSize;
-        if (leftover < totalCount) {
-            std::memcpy(outPtr + leftover, inPtr + leftover,
-                        (totalCount - leftover) * sizeof(tuwtype_t));
+        // If we have an odd block left, copy it directly
+        if (numBlocks % 2 == 1) {
+            int lastStart = (numBlocks - 1) * blockSize;
+            int lastSize = std::min(blockSize, totalCount - lastStart);
+            std::memcpy(outPtr + outBlock * (2*blockSize),
+                        inPtr + lastStart,
+                        lastSize * sizeof(tuwtype_t));
+            ++outBlock;
         }
 
-        currBlockSize <<= 1;
-        if (currBlockSize > totalCount) {
-            currBlockSize = totalCount;
-        }
+        blockSize *= 2;
+        numBlocks = outBlock;
 
-        tuwtype_t* tmp = inPtr;
-        inPtr = outPtr;
-        outPtr = tmp;
+        std::swap(inPtr, outPtr);
     }
 
-    std::memcpy(data, inPtr, totalCount * sizeof(tuwtype_t));
+    if (inPtr != data) {
+        std::memcpy(data, inPtr, totalCount * sizeof(tuwtype_t));
+    }
     return MPI_SUCCESS;
 }
