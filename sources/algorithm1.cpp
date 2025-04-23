@@ -54,7 +54,7 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
     local.resize(max_size);
     std::vector<tuwtype_t> recv_block(max_size);
     std::vector<tuwtype_t> merged(max_size);
-    // maximal size achieved when p is one off its next power of 2, e.g. p=63 -> max_size=63-32
+    // maximal size achieved when p is one off its next power of 2, e.g. p=63 -> max_size=63-32 -> p / 2
     std::vector<tuwtype_t> partial(static_cast<int>(max_size/2) + 1);
 
     int log_p = static_cast<int>(std::log2(size));
@@ -62,6 +62,7 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
     int idx = 0;
     int k;
     int original_size;
+    int rank_to_inspect = 1;
     for (k = 0; k < log_p; ++k) {
         int s_k = 1 << k;
         int partner_send = (rank - s_k + size) % size;
@@ -82,6 +83,17 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
             current_size += static_cast<int>(partial.size());
         }
 
+        if (rank == rank_to_inspect) {
+            std::cout << "[Round " << k << "]\n";
+            std::cout << "  r = " << r << ", s_k = " << s_k << ", partner_send = " << partner_send << ", partner_recv = " << partner_recv << "\n";
+            std::cout << "  original_size = " << original_size << ", current_size = " << current_size << "\n";
+            std::cout << "  partial.size() = " << partial.size() << "\n";
+            std::cout << "  partial contents: ";
+            for (int i = 0; i < static_cast<int>(partial.size()); ++i)
+                std::cout << partial[i] << " ";
+            std::cout << "\n";
+        }
+
         MPI_Sendrecv(local.data(), current_size, sendtype, partner_send, 0,
                     recv_block.data(), current_size, recvtype, partner_recv, 0,
                     comm, MPI_STATUS_IGNORE);
@@ -93,6 +105,13 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
         } else if (r == 0){
             std::copy(local.begin(), local.begin() + original_size, partial.data());
         }
+        if (rank == rank_to_inspect){
+            std::cout << "  merged contents: ";
+            for (int i = 0; i < static_cast<int>(merged.size()); ++i)
+                std::cout << merged[i] << " ";
+            std::cout << "\n";
+        }
+
         std::swap(local, merged);
         current_size = 2 * original_size;
         
@@ -107,10 +126,26 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
         int partner_recv = (rank + s_k) % size;
 
         int last_size = static_cast<int>(partial.size());
+
+        if (rank == rank_to_inspect) {
+            std::cout << "[Final Round]\n";
+            std::cout << "  last_size = " << last_size << "\n";
+            std::cout << "  partial contents: ";
+            for (int i = 0; i < last_size; ++i)
+                std::cout << partial[i] << " ";
+            std::cout << "\n";
+        }
         MPI_Sendrecv(partial.data(), last_size, sendtype, partner_send, 0,
         recv_block.data(), last_size, recvtype, partner_recv, 0,
         comm, MPI_STATUS_IGNORE);
         mergeInts(local.data(), original_size, recv_block.data(), last_size, merged.data());
+        if (rank == rank_to_inspect){
+            std::cout << "  merged contents: ";
+            for (int i = 0; i < static_cast<int>(merged.size()); ++i)
+                std::cout << merged[i] << " ";
+            std::cout << "\n";
+        }
+        std::swap(local, merged);
     }
     std::copy(local.begin(), local.begin() + current_size, output);
     return MPI_SUCCESS;
