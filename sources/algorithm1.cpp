@@ -36,7 +36,7 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
     }
     
     while (R > 0) {
-        int n = static_cast<int>(std::log2(l)); //HERE IS THE ERROR THIS SHIT DONT WORK, TOO HIGH
+        int n = static_cast<int>(std::log2(R));
         int r = R - (1 << n); 
         round_block_pairs.emplace_back(n, r);
     
@@ -93,8 +93,7 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
         // If r=0, only the local merged list will be saved in the partial buffer
         // If r>0, additional blocks are sent and received, which have to be merged with the local list and then stored in the partial buffer
         if (r > 0 && !partial.empty()){
-            partial_size += (r + 1) * sendcount;
-            local.insert(local.end(), partial.begin(), partial.end());
+            local.insert(local.begin() + original_size, partial.begin(), partial.begin() + partial_size);
             current_size += partial_size;
         }
 
@@ -128,14 +127,10 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
                 std::cout << partial[i] << " ";
             std::cout << "\n";
             std::cout << "  partial.size() = " << partial_size << "\n";
-        }
-        if (rank == rank_to_inspect){
             std::cout << "  local contents: ";
             for (int i = 0; i < static_cast<int>(local.size()); ++i)
                 std::cout << local[i] << " ";
             std::cout << "\n";
-        }
-        if (rank == rank_to_inspect){
             std::cout << "  merged contents: ";
             for (int i = 0; i < static_cast<int>(merged.size()); ++i)
                 std::cout << merged[i] << " ";
