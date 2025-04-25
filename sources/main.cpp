@@ -208,7 +208,7 @@ void run_all_measurements(int rank, int size, int algo, int msg_index, int type,
         HPC_AllgatherMergeBruck(sendbuf, m, TUW_TYPE, recvbuf, m, TUW_TYPE, comm);
         break;
       case Circulant:
-        HPC_AllgatherMergeBruck(sendbuf, m, TUW_TYPE, recvbuf, m, TUW_TYPE, comm);
+        HPC_AllgatherMergeCirculant(sendbuf, m, TUW_TYPE, recvbuf, m, TUW_TYPE, comm);
         break;
       default:
         break;

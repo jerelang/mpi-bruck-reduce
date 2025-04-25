@@ -41,9 +41,9 @@ int HPC_AllgatherMergeBase(const void *sendbuf,
     }
 
     // Ping Pong buffer approach to avoid extra mcopy in each merge round
-    std::vector<tuwtype_t> temp(totalCount);
+    tuwtype_t* temp = (tuwtype_t*)malloc(totalCount * sizeof(tuwtype_t));
     tuwtype_t* inPtr  = data;
-    tuwtype_t* outPtr = temp.data();
+    tuwtype_t* outPtr = temp;
 
     int blockSize = recvcount;
     int numBlocks = size;
@@ -78,7 +78,10 @@ int HPC_AllgatherMergeBase(const void *sendbuf,
         blockSize *= 2;
         numBlocks = outBlock;
 
-        std::swap(inPtr, outPtr);
+        // Swap pointers
+		tuwtype_t* temp = inPtr;
+		inPtr = outPtr;
+		outPtr = temp;
     }
 
     if (inPtr != data) {
