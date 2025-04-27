@@ -61,19 +61,31 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
     #endif
 
     const tuwtype_t *send_data = static_cast<const tuwtype_t *>(sendbuf);
-    tuwtype_t* output = static_cast<tuwtype_t*>(recvbuf);
 
     int max_size = sendcount * size;
     int current_size = sendcount;
 
     // Preallocate memory for arrays
-    tuwtype_t* local = (tuwtype_t*)malloc(max_size * sizeof(tuwtype_t));
-    memcpy(local, send_data, sendcount * sizeof(tuwtype_t));
+    tuwtype_t* inPtr = (tuwtype_t*)malloc(max_size * sizeof(tuwtype_t));
     tuwtype_t* recv_block = (tuwtype_t*)malloc(max_size * sizeof(tuwtype_t));
-    tuwtype_t* merged = (tuwtype_t*)malloc(max_size * sizeof(tuwtype_t));
+    tuwtype_t* outPtr = static_cast< tuwtype_t *>(recvbuf);
     tuwtype_t* partial = (tuwtype_t*)malloc((max_size / 2 + 1) * sizeof(tuwtype_t));
 
     int log_p = static_cast<int>(std::log2(size));
+
+    tuwtype_t* local;
+	tuwtype_t* merged;
+
+	// determine pointers such that after the final round, the result gets already merged into the recvbuf
+	if (static_cast<int>(std::ceil(std::log2(size))) % 2 == 0) {
+        local  = outPtr;
+        merged = inPtr;
+    } else {
+        local  = inPtr;
+        merged = outPtr;
+    }
+    memcpy(local, send_data, sendcount * sizeof(tuwtype_t));
+
     int r = -1; // normal round if r = -1
     int idx = 0;
     int k;
@@ -193,11 +205,8 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
         merged = temp;
     }
 
-    memcpy(output, local, (current_size + partial_size) * sizeof(tuwtype_t));
-
-    free(local);
+    free(inPtr);
     free(recv_block);
-    free(merged);
     free(partial);
 
     return MPI_SUCCESS;
