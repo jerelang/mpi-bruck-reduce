@@ -123,19 +123,7 @@ int HPC_AllgatherMergeCirculant(const void *sendbuf,
 	
 	// Final merge with initial data
 	mergeInts(W, max_size - sendcount, local, sendcount, merged);
-
-	#ifdef DEBUG
-		if (rank == rank_to_inspect) {
-			std::cout << "  output: ";
-			for (int i = 0; i < max_size; ++i) std::cout << output[i] << " ";
-			std::cout << "\n";
-		
-			std::cout << "  merged: ";
-			for (int i = 0; i < max_size; ++i) std::cout << merged[i] << " ";
-			std::cout << "\n";
-		}
-	#endif
-
+	
 	free(local);
 	free(recv_block);
 	free(inPtr);

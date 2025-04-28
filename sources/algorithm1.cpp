@@ -97,7 +97,7 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
         int partner_recv = (rank + s_k) % size;
 
         // Check if additional blocks have to be sent unmerged this round
-        if (idx < round_block_pairs.size() && round_block_pairs[idx].first == k) {
+        if (idx < static_cast<int>(round_block_pairs.size()) && round_block_pairs[idx].first == k) {
             r = round_block_pairs[idx].second;
             idx++;
         }

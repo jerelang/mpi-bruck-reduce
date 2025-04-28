@@ -79,13 +79,15 @@ int HPC_AllgatherMergeBase(const void *sendbuf,
         numBlocks = outBlock;
 
         // Swap pointers
-		tuwtype_t* temp = inPtr;
+		tuwtype_t* inPtr_temp = inPtr;
 		inPtr = outPtr;
-		outPtr = temp;
+		outPtr = inPtr_temp;
     }
 
     if (inPtr != data) {
         std::memcpy(data, inPtr, totalCount * sizeof(tuwtype_t));
     }
+
+    free(temp);
     return MPI_SUCCESS;
 }
