@@ -21,7 +21,6 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
     MPI_Comm_size(comm, &size);
 
     if (size == 1) {
-        std::memcpy(recvbuf, sendbuf, sendcount * sizeof(tuwtype_t));
         return MPI_SUCCESS;
     }
 
