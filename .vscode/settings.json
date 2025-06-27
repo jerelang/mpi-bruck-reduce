@@ -50,6 +50,9 @@
         "__split_buffer": "cpp",
         "deque": "cpp",
         "queue": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "stack": "cpp",
+        "memory": "cpp",
+        "print": "cpp"
     }
 }

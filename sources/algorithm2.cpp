@@ -8,7 +8,7 @@
 
 #include "algorithms.h"
 
-int HPC_AllgatherMergeCirculant(const void *sendbuf,
+int Circulant(const void *sendbuf,
     int sendcount,
     MPI_Datatype sendtype,
     void *recvbuf,
@@ -23,19 +23,19 @@ int HPC_AllgatherMergeCirculant(const void *sendbuf,
 		return MPI_SUCCESS;
 	}
 
-	const tuwtype_t *V = static_cast<const tuwtype_t *>(sendbuf);
+	const int *V = static_cast<const int *>(sendbuf);
 
 	int max_size = sendcount * size;
 
-	tuwtype_t* local = (tuwtype_t*)malloc(sendcount * sizeof(tuwtype_t));
-	std::memcpy(local, V, sendcount * sizeof(tuwtype_t));
-	tuwtype_t* outPtr = static_cast< tuwtype_t *>(recvbuf);
-	tuwtype_t* recv_block = (tuwtype_t*)malloc(max_size * sizeof(tuwtype_t));
-	tuwtype_t* inPtr = (tuwtype_t*)malloc(max_size * sizeof(tuwtype_t));
+	int* local = (int*)malloc(sendcount * sizeof(int));
+	std::memcpy(local, V, sendcount * sizeof(int));
+	int* outPtr = static_cast< int *>(recvbuf);
+	int* recv_block = (int*)malloc(max_size * sizeof(int));
+	int* inPtr = (int*)malloc(max_size * sizeof(int));
 
 	int q = static_cast<int>(std::ceil(std::log2(size)));
-	tuwtype_t* W;
-	tuwtype_t* merged;
+	int* W;
+	int* merged;
 
 	// determine pointers such that after the final round, the result gets already merged into the recvbuf
 	if (q % 2 != 0) {
@@ -89,7 +89,7 @@ int HPC_AllgatherMergeCirculant(const void *sendbuf,
 							 recv_block, current_size, recvtype, from, 0,
 							 comm, MPI_STATUS_IGNORE);
 	
-				std::memcpy(merged, recv_block, current_size * sizeof(tuwtype_t));
+				std::memcpy(merged, recv_block, current_size * sizeof(int));
 	
 			} else {
 				mergeInts(W, current_size - sendcount, local, sendcount, merged);
@@ -115,7 +115,7 @@ int HPC_AllgatherMergeCirculant(const void *sendbuf,
 		#endif
 
 		// Swap pointers
-		tuwtype_t* temp = W;
+		int* temp = W;
 		W = merged;
 		merged = temp;
 	}

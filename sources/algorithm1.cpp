@@ -8,7 +8,7 @@
 
 #include "algorithms.h"
 
-int HPC_AllgatherMergeBruck(const void *sendbuf,
+int Dissemination(const void *sendbuf,
     int sendcount,
     MPI_Datatype sendtype,
     void *recvbuf,
@@ -59,21 +59,21 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
         }
     #endif
 
-    const tuwtype_t *send_data = static_cast<const tuwtype_t *>(sendbuf);
+    const int *send_data = static_cast<const int *>(sendbuf);
 
     int max_size = sendcount * size;
     int current_size = sendcount;
 
     // Preallocate memory for arrays
-    tuwtype_t* inPtr = (tuwtype_t*)malloc(max_size * sizeof(tuwtype_t));
-    tuwtype_t* recv_block = (tuwtype_t*)malloc(max_size * sizeof(tuwtype_t));
-    tuwtype_t* outPtr = static_cast< tuwtype_t *>(recvbuf);
-    tuwtype_t* partial = (tuwtype_t*)malloc((max_size / 2 + 1) * sizeof(tuwtype_t));
+    int* inPtr = (int*)malloc(max_size * sizeof(int));
+    int* recv_block = (int*)malloc(max_size * sizeof(int));
+    int* outPtr = static_cast< int *>(recvbuf);
+    int* partial = (int*)malloc((max_size / 2 + 1) * sizeof(int));
 
     int log_p = static_cast<int>(std::log2(size));
 
-    tuwtype_t* local;
-	tuwtype_t* merged;
+    int* local;
+	int* merged;
 
 	// determine pointers such that after the final round, the result gets already merged into the recvbuf
 	if (static_cast<int>(std::ceil(std::log2(size))) % 2 == 0) {
@@ -83,7 +83,7 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
         local  = inPtr;
         merged = outPtr;
     }
-    memcpy(local, send_data, sendcount * sizeof(tuwtype_t));
+    memcpy(local, send_data, sendcount * sizeof(int));
 
     int r = -1; // normal round if r = -1
     int idx = 0;
@@ -106,7 +106,7 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
         // If r=0, only the local merged list will be saved in the partial buffer
         // If r>0, additional blocks are sent and received, which have to be merged with the local list and then stored in the partial buffer
         if (r > 0 && partial_size > 0){
-            memcpy(local + original_size, partial, partial_size * sizeof(tuwtype_t));
+            memcpy(local + original_size, partial, partial_size * sizeof(int));
             current_size += partial_size;
         }
 
@@ -134,7 +134,7 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
             partial_size += original_size;
         } else if (r == 0){
             partial_size += original_size;
-            memcpy(partial, local, original_size * sizeof(tuwtype_t));
+            memcpy(partial, local, original_size * sizeof(int));
         }
 
         #ifdef DEBUG
@@ -156,7 +156,7 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
         #endif  
 
         // Swap pointers
-        tuwtype_t* temp = local;
+        int* temp = local;
         local = merged;
         merged = temp;
 
@@ -199,7 +199,7 @@ int HPC_AllgatherMergeBruck(const void *sendbuf,
             }
         #endif
         // Swap pointers for the final merge
-        tuwtype_t* temp = local;
+        int* temp = local;
         local = merged;
         merged = temp;
     }

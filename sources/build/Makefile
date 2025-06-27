@@ -57,10 +57,10 @@ RM = /Applications/CMake.app/Contents/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/jere/Documents/uni/hpc_2/sources
+CMAKE_SOURCE_DIR = /Users/jere/Documents/uni/hpc_2-1/sources
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/jere/Documents/uni/hpc_2/sources/build
+CMAKE_BINARY_DIR = /Users/jere/Documents/uni/hpc_2-1/sources/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jere/Documents/uni/hpc_2/sources/build/CMakeFiles /Users/jere/Documents/uni/hpc_2/sources/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jere/Documents/uni/hpc_2-1/sources/build/CMakeFiles /Users/jere/Documents/uni/hpc_2-1/sources/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jere/Documents/uni/hpc_2/sources/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jere/Documents/uni/hpc_2-1/sources/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -117,24 +117,48 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named allgather_merge
+# Target rules for targets named dissemination_reduce
 
 # Build rule for target.
-allgather_merge: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 allgather_merge
-.PHONY : allgather_merge
+dissemination_reduce: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dissemination_reduce
+.PHONY : dissemination_reduce
 
 # fast build rule for target.
-allgather_merge/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/build
-.PHONY : allgather_merge/fast
+dissemination_reduce/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/build
+.PHONY : dissemination_reduce/fast
+
+algorithm0.o: algorithm0.cpp.o
+.PHONY : algorithm0.o
+
+# target to build an object file
+algorithm0.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/algorithm0.cpp.o
+.PHONY : algorithm0.cpp.o
+
+algorithm0.i: algorithm0.cpp.i
+.PHONY : algorithm0.i
+
+# target to preprocess a source file
+algorithm0.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/algorithm0.cpp.i
+.PHONY : algorithm0.cpp.i
+
+algorithm0.s: algorithm0.cpp.s
+.PHONY : algorithm0.s
+
+# target to generate assembly for a file
+algorithm0.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/algorithm0.cpp.s
+.PHONY : algorithm0.cpp.s
 
 algorithm1.o: algorithm1.cpp.o
 .PHONY : algorithm1.o
 
 # target to build an object file
 algorithm1.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/algorithm1.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/algorithm1.cpp.o
 .PHONY : algorithm1.cpp.o
 
 algorithm1.i: algorithm1.cpp.i
@@ -142,7 +166,7 @@ algorithm1.i: algorithm1.cpp.i
 
 # target to preprocess a source file
 algorithm1.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/algorithm1.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/algorithm1.cpp.i
 .PHONY : algorithm1.cpp.i
 
 algorithm1.s: algorithm1.cpp.s
@@ -150,7 +174,7 @@ algorithm1.s: algorithm1.cpp.s
 
 # target to generate assembly for a file
 algorithm1.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/algorithm1.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/algorithm1.cpp.s
 .PHONY : algorithm1.cpp.s
 
 algorithm2.o: algorithm2.cpp.o
@@ -158,7 +182,7 @@ algorithm2.o: algorithm2.cpp.o
 
 # target to build an object file
 algorithm2.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/algorithm2.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/algorithm2.cpp.o
 .PHONY : algorithm2.cpp.o
 
 algorithm2.i: algorithm2.cpp.i
@@ -166,7 +190,7 @@ algorithm2.i: algorithm2.cpp.i
 
 # target to preprocess a source file
 algorithm2.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/algorithm2.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/algorithm2.cpp.i
 .PHONY : algorithm2.cpp.i
 
 algorithm2.s: algorithm2.cpp.s
@@ -174,39 +198,15 @@ algorithm2.s: algorithm2.cpp.s
 
 # target to generate assembly for a file
 algorithm2.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/algorithm2.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/algorithm2.cpp.s
 .PHONY : algorithm2.cpp.s
-
-baseline.o: baseline.cpp.o
-.PHONY : baseline.o
-
-# target to build an object file
-baseline.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/baseline.cpp.o
-.PHONY : baseline.cpp.o
-
-baseline.i: baseline.cpp.i
-.PHONY : baseline.i
-
-# target to preprocess a source file
-baseline.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/baseline.cpp.i
-.PHONY : baseline.cpp.i
-
-baseline.s: baseline.cpp.s
-.PHONY : baseline.s
-
-# target to generate assembly for a file
-baseline.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/baseline.cpp.s
-.PHONY : baseline.cpp.s
 
 main.o: main.cpp.o
 .PHONY : main.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -214,7 +214,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -222,8 +222,32 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/allgather_merge.dir/build.make CMakeFiles/allgather_merge.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/main.cpp.s
 .PHONY : main.cpp.s
+
+merge.o: merge.cpp.o
+.PHONY : merge.o
+
+# target to build an object file
+merge.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/merge.cpp.o
+.PHONY : merge.cpp.o
+
+merge.i: merge.cpp.i
+.PHONY : merge.i
+
+# target to preprocess a source file
+merge.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/merge.cpp.i
+.PHONY : merge.cpp.i
+
+merge.s: merge.cpp.s
+.PHONY : merge.s
+
+# target to generate assembly for a file
+merge.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dissemination_reduce.dir/build.make CMakeFiles/dissemination_reduce.dir/merge.cpp.s
+.PHONY : merge.cpp.s
 
 # Help Target
 help:
@@ -233,19 +257,22 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... allgather_merge"
+	@echo "... dissemination_reduce"
+	@echo "... algorithm0.o"
+	@echo "... algorithm0.i"
+	@echo "... algorithm0.s"
 	@echo "... algorithm1.o"
 	@echo "... algorithm1.i"
 	@echo "... algorithm1.s"
 	@echo "... algorithm2.o"
 	@echo "... algorithm2.i"
 	@echo "... algorithm2.s"
-	@echo "... baseline.o"
-	@echo "... baseline.i"
-	@echo "... baseline.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... merge.o"
+	@echo "... merge.i"
+	@echo "... merge.s"
 .PHONY : help
 
 
