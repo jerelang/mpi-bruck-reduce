@@ -46,7 +46,9 @@ for i, tasks in enumerate(tasks_sorted):
         sns.lineplot(data=cfg, x="MessageSize", y="Runtime",
                      hue="Algorithm", marker="o", ax=ax, palette="colorblind")
         ax.set_title(f"{nodes}x{tasks}")
-        ax.set_xlabel("Message Size (per processor)")
+        ax.set_xscale("log")
+        ax.set_yscale("log")
+        ax.set_xlabel("Message Size (log, per processor)")
         ax.set_ylabel("Runtime (s)" if j == 0 else "")
         ax.yaxis.set_major_formatter(formatter)
         ax.ticklabel_format(style='sci', axis='y', scilimits=(-2, 2))
@@ -59,4 +61,4 @@ fig.legend(handles, labels, loc='upper right', title="Algorithm")
 fig.suptitle(
     "Runtime by Algorithm for all configurations (M. Type 2 only)", fontsize=14)
 plt.tight_layout(rect=[0, 0, 1, 0.95])
-plt.savefig("runtime_grid.pdf")
+plt.savefig("runtime_grid_logy.pdf")
