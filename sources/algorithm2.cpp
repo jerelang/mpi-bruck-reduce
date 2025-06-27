@@ -37,7 +37,7 @@ int Circulant(const void *sendbuf,
 	int* W;
 	int* merged;
 
-	// determine pointers such that after the final round, the result gets already merged into the recvbuf
+	// Determine pointers such that after the final round, the result gets already merged into the recvbuf
 	if (q % 2 != 0) {
         W  = outPtr;
         merged = inPtr;
@@ -51,28 +51,12 @@ int Circulant(const void *sendbuf,
 	for (int k = q - 1; k >= 0; --k) {
 		skips[k] = (skips[k + 1] + 1) / 2;
 	}
-	#ifdef DEBUG
-		int rank_to_inspect = 0;
-	#endif
 	
 	for (int k = 0; k < q; ++k) {
 		int sk = skips[k];
 		int sk1 = skips[k + 1];
 		int eps = sk1 & 0x1;
 		int current_size = (sk - eps) * sendcount;
-
-		#ifdef DEBUG
-			if (rank == rank_to_inspect) {
-				std::cout << "[Round " << k << "]\n";
-				std::cout << "  current_size: " << current_size << ", eps: " << eps << "\n";
-				std::cout << "  sk: " << sk << ", sk1: " << sk1 << ", to: " << (rank - sk + eps + size) % size
-						<< ", from: " << (rank + sk - eps) % size << "\n";
-				std::cout << "  W (before send): ";
-				for (int i = 0; i < current_size; ++i) std::cout << W[i] << " ";
-				std::cout << "\n";
-			}
-		#endif
-
 		int to = (rank - sk + eps + size) % size;
 		int from = (rank + sk - eps) % size;
 	
@@ -101,18 +85,6 @@ int Circulant(const void *sendbuf,
 				mergeInts(W, current_size - sendcount, recv_block, current_size, merged);
 			}
 		}
-		
-		#ifdef DEBUG
-			if (rank == rank_to_inspect) {
-				std::cout << "  recv_block: ";
-				for (int i = 0; i < current_size; ++i) std::cout << recv_block[i] << " ";
-				std::cout << "\n";
-		
-				std::cout << "  merged: ";
-				for (int i = 0; i < max_size; ++i) std::cout << merged[i] << " ";
-				std::cout << "\n";
-			}
-		#endif
 
 		// Swap pointers
 		int* temp = W;

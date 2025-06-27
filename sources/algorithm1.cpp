@@ -28,39 +28,16 @@ int Dissemination(const void *sendbuf,
     std::vector<std::pair<int, int>> round_block_pairs;
     int l = size - (1 << static_cast<int>(std::log2(size)));
     int R = l;
-    #ifdef DEBUG
-        int rank_to_inspect = 1;
-        if (rank == rank_to_inspect) {
-            std::cout << "[Rank " << rank << "] l = " << l << "\n";
-        }
-    #endif
+
     while (R > 0) {
         int n = static_cast<int>(std::log2(R));
         int r = R - (1 << n); 
         round_block_pairs.emplace_back(n, r);
-        
-        #ifdef DEBUG
-            if (rank == rank_to_inspect) {
-                std::cout << "[Rank " << rank << "] Adding round pair (n = " << n << ", r = " << r << "), R = " << R << "\n";
-                std:: cout << "n: " << n << "\n";
-            }
-        #endif
-    
         R = r;
     }
     std::reverse(round_block_pairs.begin(), round_block_pairs.end());
 
-    #ifdef DEBUG
-        if (rank == rank_to_inspect) {
-            std::cout << "[Rank " << rank << "] Final round_block_pairs:\n";
-            for (const auto& p : round_block_pairs) {
-                std::cout << "  (round = " << p.first << ", blocks = " << p.second << ")\n";
-            }
-        }
-    #endif
-
     const int *send_data = static_cast<const int *>(sendbuf);
-
     int max_size = sendcount * size;
     int current_size = sendcount;
 
@@ -75,7 +52,7 @@ int Dissemination(const void *sendbuf,
     int* local;
 	int* merged;
 
-	// determine pointers such that after the final round, the result gets already merged into the recvbuf
+	// Determine pointers such that after the final round, the result gets already merged into the recvbuf
 	if (static_cast<int>(std::ceil(std::log2(size))) % 2 == 0) {
         local  = outPtr;
         merged = inPtr;
@@ -85,7 +62,7 @@ int Dissemination(const void *sendbuf,
     }
     memcpy(local, send_data, sendcount * sizeof(int));
 
-    int r = -1; // normal round if r = -1
+    int r = -1; // Normal round if r = -1
     int idx = 0;
     int k;
     int original_size;
@@ -110,19 +87,6 @@ int Dissemination(const void *sendbuf,
             current_size += partial_size;
         }
 
-        #ifdef DEBUG
-            if (rank == rank_to_inspect) {
-                std::cout << "[Round " << k << "]\n";
-                std::cout << "  r = " << r << ", s_k = " << s_k << ", partner_send = " << partner_send << ", partner_recv = " << partner_recv << "\n";
-                std::cout << "  original_size = " << original_size << ", current_size = " << current_size << "\n";
-                std::cout << "  partial.size() = " << partial_size << "\n";
-                std::cout << "  partial contents: ";
-                for (int i = 0; i < static_cast<int>(partial_size); ++i)
-                    std::cout << partial[i] << " ";
-                std::cout << "\n";
-            }
-        #endif
-
         MPI_Sendrecv(local, current_size, sendtype, partner_send, 0,
                      recv_block, current_size, recvtype, partner_recv, 0,
                      comm, MPI_STATUS_IGNORE);
@@ -137,24 +101,6 @@ int Dissemination(const void *sendbuf,
             memcpy(partial, local, original_size * sizeof(int));
         }
 
-        #ifdef DEBUG
-            if (rank == rank_to_inspect){
-                std::cout << "  partial contents after copy: ";
-                for (int i = 0; i < static_cast<int>(partial_size); ++i)
-                    std::cout << partial[i] << " ";
-                std::cout << "\n";
-                std::cout << "  partial_size = " << partial_size << "\n";
-                std::cout << "  local contents: ";
-                for (int i = 0; i < static_cast<int>(current_size); ++i)
-                    std::cout << local[i] << " ";
-                std::cout << "\n";
-                std::cout << "  merged contents: ";
-                for (int i = 0; i < static_cast<int>(max_size); ++i)
-                    std::cout << merged[i] << " ";
-                std::cout << "\n";
-            }
-        #endif  
-
         // Swap pointers
         int* temp = local;
         local = merged;
@@ -167,22 +113,11 @@ int Dissemination(const void *sendbuf,
         r = -1; // reset block number
     }
 
-    // additional last round if p is not a power of 2
+    // Additional last round if p is not a power of 2
     if (l != 0){
         int s_k = 1 << k;
         int partner_send = (rank - s_k + size) % size;
         int partner_recv = (rank + s_k) % size;
-
-        #ifdef DEBUG
-            if (rank == rank_to_inspect) {
-                std::cout << "[Final Round]\n";
-                std::cout << "  last_size = " << partial_size << "\n";
-                std::cout << "  partial contents: ";
-                for (int i = 0; i < partial_size; ++i)
-                    std::cout << partial[i] << " ";
-                std::cout << "\n";
-            }
-        #endif
 
         MPI_Sendrecv(partial, partial_size, sendtype, partner_send, 0,
                      recv_block, partial_size, recvtype, partner_recv, 0,
@@ -190,14 +125,6 @@ int Dissemination(const void *sendbuf,
 
         mergeInts(local, current_size, recv_block, partial_size, merged);
 
-        #ifdef DEBUG
-            if (rank == rank_to_inspect){
-                std::cout << "  merged contents: ";
-                for (int i = 0; i < static_cast<int>(max_size); ++i)
-                    std::cout << merged[i] << " ";
-                std::cout << "\n";
-            }
-        #endif
         // Swap pointers for the final merge
         int* temp = local;
         local = merged;

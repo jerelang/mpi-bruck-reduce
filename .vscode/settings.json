@@ -54,5 +54,6 @@
         "stack": "cpp",
         "memory": "cpp",
         "print": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

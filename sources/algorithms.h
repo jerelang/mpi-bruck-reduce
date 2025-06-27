@@ -21,4 +21,4 @@ int Circulant(const void *sendbuf, int sendcount,
 #ifdef __cplusplus
 
 #endif
-#endif // ALGORITHMS_H_
+#endif
