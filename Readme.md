@@ -1,4 +1,4 @@
-# Modified Dissemination/Bruck Algorithm for Commutative Reduction in MPI
+# Modified Bruck/Dissemination Algorithm for Commutative Reduction
 
 This repository presents a modified variant of the Bruck/Dissemination algorithm for commutative reduction operations in MPI. The implementation performs a global merge of sorted local blocks across all processes, achieving the same asymptotic communication and computation complexity as standard MPI_Allgather-based approaches. While this implementation uses element-wise merging as the reduction operator, the structure of the algorithm supports any commutative operation.
 
