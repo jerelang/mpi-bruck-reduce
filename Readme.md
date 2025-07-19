@@ -1,25 +1,23 @@
-# MPI Allgather-Merge Algorithms
+# MPI Commutative Reduction Algorithms
 
-This repository presents a modified variant of the Bruck/Dissemination algorithm for commutative reduction operations in MPI. The implementation performs a global merge of sorted local blocks across all processes, achieving the same asymptotic communication and computation complexity as standard MPI_Allgather-based approaches. While this implementation uses element-wise merging as the reduction operator, the structure of the algorithm supports any commutative operation. Unlike circulant-style Allreduce variants, which require different communication partners based on the number of processes, this version preserves the fixed partner structure of Bruck’s algorithm—making it suitable for systems with pre-optimized communication schedules or strict communication policies. To support correct aggregation, the Dissemination/Bruck algorithm is modified to transmit additional data only in specific, predetermined rounds—precisely when required to avoid loss of information due to overlapping reductions. This extra data is accumulated in a separate buffer and sent in a final additional round. The selection of rounds and data is optimal: it represents the minimal necessary overhead, resulting in at most 1.5× the total data volume of the standard Bruck’s algorithm in the worst case. For a detailed space and time complexity analysis of the three implemented algorithms, see the [report (PDF)](./report.pdf).
+This repository presents a modified variant of the Bruck/Dissemination algorithm for commutative reduction operations in MPI. The implementation performs a global merge of sorted local blocks across all processes, achieving the same asymptotic communication and computation complexity as standard MPI_Allgather-based approaches. While this implementation uses element-wise merging as the reduction operator, the structure of the algorithm supports any commutative operation.
 
-## Project Objectives
+Unlike circulant-style Allreduce variants, which require different communication partners based on the number of processes, this version preserves the fixed partner structure of Bruck’s algorithm—making it suitable for systems with pre-optimized communication schedules or strict communication policies. To support correct aggregation, the Bruck/Dissemination is modified to transmit additional data only in specific, predetermined rounds—precisely when required to avoid loss of information due to overlapping reductions. This extra data is accumulated in a separate buffer and sent in a final additional round. The selection of rounds and data is optimal: it represents the minimal necessary overhead, resulting in at most 1.5× the total data volume of the standard Bruck’s algorithm in the worst case.
 
-- Implement multiple MPI-based algorithms for distributed merging
-- Compare a baseline approach with more efficient variants
-- Provide correctness checks and runtime performance benchmarks
-- Offer a reusable foundation for custom allreduce-style operations
+For pseudo code and a detailed space and time complexity analysis of the three implemented algorithms, see [details (PDF)](./details.pdf).
+
 
 ## Implemented Algorithms
 
-| ID | Name       | Description                                           |
-|----|------------|-------------------------------------------------------|
-| 0  | Baseline   | Standard `MPI_Allgather` followed by local sort       |
-| 1  | Bruck      | Dissemination-style allgather and merge               |
-| 2  | Circulant  | Pairwise exchange-based reduction (like allreduce)    |
+| ID | Name       | Description                                                                          |
+|----|------------|--------------------------------------------------------------------------------------|
+| 0  | Baseline   | Standard `MPI_Allgather` followed by local sort                                      |
+| 1  | Bruck      | Dissemination based allgather and merge with extra data sends                        |
+| 2  | Circulant  | Roughly-halving skips communication, optimal but different communication pairs       |
 
 Each algorithm is implemented in its own source file and selected at runtime via command-line arguments.
 
-## Build Instructions
+## Build Instructionsq
 
 ### Requirements
 
@@ -86,16 +84,8 @@ Correctness check passed.
 ├── main.cpp              # Entry point and benchmark driver
 ├── baseline.cpp          # Baseline allgather + sort
 ├── algorithm1.cpp        # Bruck-style dissemination algorithm
-├── algorithm2.cpp        # Circulant (allreduce-like) algorithm
+├── algorithm2.cpp        # Circulant algorithm
 ├── merge.cpp             # Sorted merge routine
 ├── algorithms.h          # Common declarations
 ├── CMakeLists.txt        # Build configuration
 ```
-
-## License
-
-This project is open for academic and educational use. Attribution is appreciated if you use or adapt it in your work.
-
-## Acknowledgements
-
-This work was originally developed as part of an HPC course project at TU Wien (2025). The testing harness has been simplified and refactored to support public reuse and further extension.
