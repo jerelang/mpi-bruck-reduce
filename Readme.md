@@ -1,8 +1,10 @@
 # Modified Bruck/Dissemination Algorithm for Commutative Reduction
 
-This repository presents a modified variant of the Bruck/Dissemination algorithm for commutative reduction operations in MPI. The implementation performs a global merge of sorted local blocks across all processes, achieving the same asymptotic communication and computation complexity as standard MPI_Allgather-based approaches. While this implementation uses element-wise merging as the reduction operator, the structure of the algorithm supports any commutative operation.
+This repository presents a modified variant of the Bruck/Dissemination algorithm for commutative reduction operations in MPI. The implementation performs a global merge of sorted local blocks across all processes, achieving the same asymptotic communication and computation complexity as standard MPI_Allgather-based approaches.
 
-Unlike circulant-style Allreduce variants, which require different communication partners based on the number of processes, this version preserves the fixed partner structure of Bruck’s algorithm—making it suitable for systems with pre-optimized communication schedules or strict communication policies. To support correct aggregation, the Bruck/Dissemination is modified to transmit additional data only in specific, predetermined rounds—precisely when required to avoid loss of information due to overlapping reductions. This extra data is accumulated in a separate buffer and sent in a final additional round. The selection of rounds and data is optimal: it represents the minimal necessary overhead, resulting in at most 1.5× the total data volume of the standard Bruck’s algorithm in the worst case.
+Although this implementation uses element-wise merging as the reduction operator, the structure of the algorithm supports any commutative operation.
+
+Unlike circulant-style Allreduce variants, which require different communication partners based on the number of processes, this version preserves the fixed partner structure of Bruck’s algorithm—making it suitable for systems with pre-optimized communication schedules or strict communication policies. To support correct aggregation, the Bruck/Dissemination algorithm is modified to transmit additional data only in specific, predetermined rounds—precisely when required to avoid loss of information due to overlapping reductions. This extra data is accumulated in a separate buffer and sent in a final additional round. The selection of rounds and data is optimal: it represents the minimal necessary overhead, resulting in at most 1.5× the total data volume of the standard Bruck’s algorithm in the worst case.
 
 For pseudo code and a detailed space and time complexity analysis of the three implemented algorithms, see [details (PDF)](./details.pdf).
 
@@ -17,7 +19,7 @@ For pseudo code and a detailed space and time complexity analysis of the three i
 
 Each algorithm is implemented in its own source file and selected at runtime via command-line arguments.
 
-## Build Instructionsq
+## Build Instructions
 
 ### Requirements
 
@@ -28,20 +30,20 @@ Each algorithm is implemented in its own source file and selected at runtime via
 ### Build Steps
 
 ```bash
-git clone https://github.com/yourusername/mpi-bruck-reduce.git
+git clone https://github.com/jerelang/mpi-bruck-reduce.git
 cd mpi-bruck-reduce
 cmake -B build
 cmake --build build
 ```
 
-This will generate the `allgather_merge` executable in the `build/` directory.
+This will generate the `dissemniation_reduce` executable in the `build/` directory.
 
 ## Usage
 
 Run the program using `mpirun` or `mpiexec`:
 
 ```bash
-mpirun -np <num_processes> ./build/allgather_merge [msg_size] [algorithm] [--check] [--warmup <int>] [--repeat <int>]
+mpirun -np <num_processes> ./build/dissemniation_reduce [msg_size] [algorithm] [--check] [--warmup <int>] [--repeat <int>]
 ```
 
 ### Arguments
@@ -65,17 +67,11 @@ mpirun -np <num_processes> ./build/allgather_merge [msg_size] [algorithm] [--che
 ### Example
 
 ```bash
-mpirun -np 4 ./build/dissemination_reduce 10000 1 --check --repeat 5
+mpirun -np 4 ./build/dissemniation_reduce 10000 1 --check --repeat 5
 ```
 
 Runs the Bruck algorithm with 10,000 integers per process, performs correctness verification, and averages over 5 timed iterations.
 
-## Output Example
-
-```
-Algorithm: 1, Msg size: 10000, Avg time over 5 runs: 735.42 us
-Correctness check passed.
-```
 
 ## Code Structure
 
