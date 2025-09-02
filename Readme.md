@@ -34,7 +34,7 @@ Each algorithm is implemented in its own source file and selected at runtime via
 ```bash
 git clone https://github.com/jerelang/mpi-bruck-reduce.git
 cd mpi-bruck-reduce
-cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake -S sources -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
 ```
 
