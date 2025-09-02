@@ -1,3 +1,5 @@
+[![CI](https://github.com/jerelang/mpi-bruck-reduce/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jerelang/mpi-bruck-reduce/actions/ci.yml)
+
 # Modified Bruck/Dissemination Algorithm for Commutative Reduction
 
 This repository presents a modified variant of the Bruck/Dissemination algorithm for commutative reduction operations in MPI. The implementation performs a global merge of sorted local blocks across all processes, achieving the same asymptotic communication and computation complexity as standard MPI_Allgather-based approaches.
@@ -32,15 +34,15 @@ Each algorithm is implemented in its own source file and selected at runtime via
 ```bash
 git clone https://github.com/jerelang/mpi-bruck-reduce.git
 cd mpi-bruck-reduce
-cmake -B build
-cmake --build build
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j
 ```
 
-This will generate the `dissemniation_reduce` executable in the `build/` directory.
+This will build the `dissemniation_reduce` executable in`build/`.
 
 ## Usage
 
-Run the program using `mpirun` or `mpiexec`:
+Run with `mpirun`/`mpiexec`:
 
 ```bash
 mpirun -np <num_processes> ./build/dissemniation_reduce [msg_size] [algorithm] [--check] [--warmup <int>] [--repeat <int>]
