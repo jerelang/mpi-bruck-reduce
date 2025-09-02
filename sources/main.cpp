@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
     local_avg /= repeat;
 
     double global_avg;
-    MPI_Reduce(&local_avg, &global_avg, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Allreduce(&local_avg, &global_avg, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
 
     if (rank == 0) {
         std::cout << "Algorithm: " << algorithm
@@ -126,7 +126,6 @@ int main(int argc, char* argv[]) {
         if (size > 1) {
             std::sort(reference.begin(), reference.end());
         }
-        recvbuf[1] = 0;
         for (int i = 0; i < msg_size * size; ++i) {
             if (recvbuf[i] != reference[i]) {
                 std::cerr << "Process " << rank << ": mismatch at index " << i
