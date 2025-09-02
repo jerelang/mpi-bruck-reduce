@@ -1,4 +1,4 @@
-[![CI](https://github.com/jerelang/mpi-bruck-reduce/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jerelang/mpi-bruck-reduce/actions/ci.yml)
+[![CI](https://github.com/jerelang/mpi-bruck-reduce/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jerelang/mpi-bruck-reduce/actions/workflows/ci.yml)
 
 # Modified Bruck/Dissemination Algorithm for Commutative Reduction
 
