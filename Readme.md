@@ -69,7 +69,7 @@ mpirun -np <num_processes> ./build/dissemniation_reduce [msg_size] [algorithm] [
 ### Example
 
 ```bash
-mpirun -np 4 ./build/dissemniation_reduce 10000 1 --check --repeat 5
+mpirun -np 4 ./build/dissemination_reduce 10000 1 --check --repeat 5
 ```
 
 Runs the Bruck algorithm with 10,000 integers per process, performs correctness verification, and averages over 5 timed iterations.
