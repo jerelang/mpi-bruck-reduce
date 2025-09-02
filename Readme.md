@@ -1,4 +1,5 @@
 [![CI](https://github.com/jerelang/mpi-bruck-reduce/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jerelang/mpi-bruck-reduce/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 # Modified Bruck/Dissemination Algorithm for Commutative Reduction
 
@@ -38,14 +39,14 @@ cmake -S sources -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
 ```
 
-This will build the `dissemniation_reduce` executable in`build/`.
+This will build the `dissemination_reduce` executable in`build/`.
 
 ## Usage
 
 Run with `mpirun`/`mpiexec`:
 
 ```bash
-mpirun -np <num_processes> ./build/dissemniation_reduce [msg_size] [algorithm] [--check] [--warmup <int>] [--repeat <int>]
+mpirun -np <num_processes> ./build/dissemination_reduce [msg_size] [algorithm] [--check] [--warmup <int>] [--repeat <int>]
 ```
 
 ### Arguments
@@ -78,12 +79,13 @@ Runs the Bruck algorithm with 10,000 integers per process, performs correctness 
 ## Code Structure
 
 ```
-.
-├── main.cpp              # Entry point and benchmark driver
-├── baseline.cpp          # Baseline allgather + sort
-├── algorithm1.cpp        # Bruck-style dissemination algorithm
-├── algorithm2.cpp        # Circulant algorithm
-├── merge.cpp             # Sorted merge routine
-├── algorithms.h          # Common declarations
-├── CMakeLists.txt        # Build configuration
+├── sources/
+│   ├── main.cpp              # Entry point and benchmark driver
+│   ├── algorithm0.cpp        # Baseline allgather + sort
+│   ├── algorithm1.cpp        # Bruck-style dissemination algorithm
+│   ├── algorithm2.cpp        # Circulant algorithm
+│   ├── merge.cpp             # Sorted merge routine
+│   ├── algorithms.h          # Common declarations
+│   └── CMakeLists.txt        # Build configuration
+└── details.pdf
 ```
