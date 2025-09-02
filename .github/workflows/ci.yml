@@ -11,13 +11,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y openmpi-bin libopenmpi-dev
-
+      - name: Clean build dir
+        run: rm -rf build
       - name: Configure (Release)
         run: cmake -S sources -B build -DCMAKE_BUILD_TYPE=Release
-
       - name: Build
         run: cmake --build build -j
-
       - name: Test
         env:
           OMPI_MCA_rmaps_base_oversubscribe: "1"
