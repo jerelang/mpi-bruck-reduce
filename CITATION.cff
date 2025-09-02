@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+title: "Fixed-Partner Bruck Reduce (FPBR)"
+authors:
+  - family-names: Lang
+    given-names: Jeremias
+repository-code: https://github.com/jerelang/mpi-bruck-reduce
+version: 0.1.0
+date-released: 2025-09-02
+preferred-citation:
+  type: software
+  title: "FPBR: fixed-partner Bruck-style commutative reduce"
+  authors:
+    - family-names: Lang
+      given-names: Jeremias
