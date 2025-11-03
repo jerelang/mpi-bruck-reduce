@@ -25,7 +25,6 @@ target_link_libraries(dissemination_reduce PRIVATE MPI::MPI_CXX m)
 # Enable optimization and warnings
 target_compile_options(dissemination_reduce PRIVATE -O3 -march=native -Wall -Wextra -pedantic)
 
-enable_testing()
 include(CTest)
 
 add_test(NAME alg_baseline  COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} 4

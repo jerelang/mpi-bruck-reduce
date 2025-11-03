@@ -38,6 +38,7 @@ int main(int argc, char *argv[]) {
   bool check = false;
 
   // Parse args
+  int positional = 0;
   for (int i = 1; i < argc; ++i) {
     if (std::strcmp(argv[i], "--check") == 0) {
       check = true;
@@ -45,11 +46,11 @@ int main(int argc, char *argv[]) {
       warmup = std::atoi(argv[++i]);
     } else if (std::strcmp(argv[i], "--repeat") == 0 && i + 1 < argc) {
       repeat = std::atoi(argv[++i]);
-    } else if (msg_size == 1000) {
-      msg_size = std::atoi(argv[i]);
-    } else if (algorithm == 0) {
-      algorithm = std::atoi(argv[i]);
-    } else {
+    } else if (positional == 0) {
+      msg_size = std::atoi(argv[i]); positional++; }
+      else if (positional == 1) {
+      algorithm = std::atoi(argv[i]); positional++; }
+      else {
       print_usage(rank, argv[0]);
       MPI_Finalize();
       return EXIT_FAILURE;

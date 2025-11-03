@@ -14,7 +14,4 @@ int Dissemination(const void *sendbuf, int sendcount, MPI_Datatype sendtype, voi
 int Circulant(const void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf,
               int recvcount, MPI_Datatype recvtype, MPI_Comm comm);
 
-#ifdef __cplusplus
-
-#endif
 #endif
