@@ -1,5 +1,5 @@
 {
-    "cmake.sourceDirectory": "/Users/jere/Documents/uni/hpc_2/sources",
+    "cmake.sourceDirectory": "/Users/jere/Documents/mpi-bruck-reduce/sources",
     "files.associations": {
         "optional": "cpp",
         "__bit_reference": "cpp",
