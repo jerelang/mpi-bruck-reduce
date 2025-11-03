@@ -1,3 +1,0 @@
-/Users/jere/Documents/uni/hpc_2-1/sources/build/CMakeFiles/dissemination_reduce.dir
-/Users/jere/Documents/uni/hpc_2-1/sources/build/CMakeFiles/edit_cache.dir
-/Users/jere/Documents/uni/hpc_2-1/sources/build/CMakeFiles/rebuild_cache.dir

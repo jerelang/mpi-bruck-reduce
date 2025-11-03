@@ -1,6 +1,36 @@
+# Build directories
 build/
-build-*/
-**/CMakeFiles/
-**/CMakeCache.txt
-**/cmake_install.cmake
-**/Makefile
+cmake-build-*/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Compiled executables
+dissemination_reduce
+
+# Compiled object files
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+Testing/
+CTestTestfile.cmake
+
+# Compilation database
+compile_commands.json
